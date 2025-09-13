@@ -1,0 +1,88 @@
+import javax.swing.*;
+import java.awt.*;
+import java.util.Timer;
+import java.util.TimerTask;
+
+class Py {
+
+    private static String[][] lyrics = {
+            {"From the dusty mesa", "3000"},
+            {"Her looming shadow grows", "4500"},
+            {"Hidden in the branches of the poison creosote", "6000"},
+            {"", "1500"},
+            {"She twines her spines up slowly towards the boiling sun", "6000"},
+            {"And when I touched her skin", "4000"},
+            {"My fingers ran with blood", "3000"},
+            {"In the hushing dusk under a swollen silver moon", "5000"},
+            {"I came walking with the wind to watch the cactus bloom", "6000"},
+            {"And strange hands halted me", "4000"},
+            {"The looming shadows danced", "4000"},
+            {"I fell down to the thorny brush and felt the trembling hands", "6000"},
+            {"When the last light warms the rocks", "5000"},
+            {"And the rattlesnakes unfold", "4000"},
+            {"Mountain cats will come to drag away your bones", "5000"},
+            {"And rise with me forever", "4000"},
+            {"Across the silent sand", "4000"},
+            {"And the stars will be your eyes", "5000"},
+            {"And the wind will be my hands", "5000"}
+    };
+
+
+    private static Color[] colors = {
+            new Color(255, 105, 180),
+            new Color(138, 43, 226)
+    };
+
+    private static int index = 0;
+    private static JLabel label;
+
+
+    private static final int PAUSE_DURATION = 1000;
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Karaoke - Far From Any Road");
+        frame.setSize(1200, 400);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setBackground(new Color(13,0,0));
+
+        label = new JLabel("", SwingConstants.CENTER);
+        label.setFont(new Font("Arial", Font.BOLD, 36));
+        label.setForeground(colors[0]);
+        frame.add(label);
+
+        frame.setVisible(true);
+
+        showNextLine();
+    }
+
+    private static void showNextLine() {
+        if(index < lyrics.length) {
+            String text = lyrics[index][0];
+            int duration = Integer.parseInt(lyrics[index][1]);
+
+            label.setText(text);
+            label.setForeground(colors[index % colors.length]);
+
+            index++;
+
+
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    label.setText("");
+                    Timer nextTimer = new Timer();
+                    nextTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            showNextLine();
+                        }
+                    }, PAUSE_DURATION);
+                }
+            }, duration);
+        } else {
+            label.setText("done");
+            label.setForeground(Color.RED);
+        }
+    }
+}
